@@ -1,0 +1,10 @@
+#  Dependencies
+node_modules/
+
+# Environment_variables (chứa mật khẩu, secret)
+.env
+backend/.env
+
+# OS / editor
+.DS_Store
+*.log
