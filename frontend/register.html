@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Đăng ký — Social Web</title>
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <header class="header">
+            <a href="index.html" class="site-title">Social Web</a>
+            <nav class="auth-nav">
+                <a href="login.html" class="auth-link">Đăng nhập</a>
+                <a href="register.html" class="auth-link auth-link-primary">Đăng ký</a>
+            </nav>
+        </header>
+
+        <main class="container">
+            <div class="auth-card">
+                <h2>Đăng ký</h2>
+                <form id="register-form">
+                    <input type="text" id="username" placeholder="Tên đăng nhập" required minlength="3" />
+                    <input type="password" id="password" placeholder="Mật khẩu (tối thiểu 6 ký tự)" required minlength="6" />
+                    <p id="error-msg" class="error-msg hidden"></p>
+                    <button type="submit">Đăng ký</button>
+                </form>
+                <p class="auth-footer">Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
+            </div>
+        </main>
+
+        <script src="js/auth.js"></script>
+        <script>
+            const form = document.getElementById('register-form');
+            const errorMsg = document.getElementById('error-msg');
+
+            if (isLoggedIn()) {
+                window.location.href = 'index.html';
+            }
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                errorMsg.classList.add('hidden');
+
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                try {
+                    const res = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username, password }),
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                        throw new Error(data.error || 'Đăng ký thất bại');
+                    }
+                    saveAuth(data.token, data.user);
+                    window.location.href = 'index.html';
+                } catch (err) {
+                    errorMsg.textContent = err.message;
+                    errorMsg.classList.remove('hidden');
+                }
+            });
+        </script>
+    </body>
+</html>

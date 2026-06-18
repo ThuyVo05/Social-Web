@@ -20,7 +20,3 @@ CREATE TABLE posts (
 INSERT INTO posts (author, content) VALUES
 ('Thuy', 'Hi'),
 ('ThuyVo', 'Hello World!');
-
-INSERT INTO users (username, password) VALUES
-('Thuy', '123456'),
-('ThuyVo', '123456');

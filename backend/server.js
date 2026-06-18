@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const postsRouter = require('./routes/posts');
+const authRouter = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,6 +14,7 @@ app.use(express.json());
 
 //API
 app.use('/api/posts', postsRouter);
+app.use('/api/auth', authRouter);
 
 //Phục vụ frontend tĩnh
 app.use(express.static(path.join(__dirname, '../frontend')));
