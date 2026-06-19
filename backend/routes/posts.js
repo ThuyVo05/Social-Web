@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/auth');
+const upload = require('../middleware/upload');
 
 //GET/api/posts
 router.get('/', async (req, res) => {
@@ -10,14 +11,28 @@ router.get('/', async (req, res) => {
 });
 
 //POST/api/posts
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, upload, async (req, res) => {
     const author = req.user.username;
-    const { content } = req.body;
-    if (!content) {
-        return res.status(400).json({error: 'Content is required'});
+    const content = req.body.content?.trim() || '';
+    const hasImage = !!req.file;
+
+    if (!content && !hasImage) {
+        return res.status(400).json({error: 'Cần có nội dung hoặc hình ảnh'});
     }
-    const [result] = await db.query('INSERT INTO posts (author, content) VALUES (?, ?)', [author, content]);
-    res.status(201).json({id: result.insertId, author, content});
+
+    const image_url = req.file ? '/uploads/' + req.file.filename : null;
+
+    const [result] = await db.query(
+        'INSERT INTO posts (author, content, image_url) VALUES (?, ?, ?)', 
+        [author, content, image_url]
+    );
+
+    res.status(201).json({
+        id: result.insertId, 
+        author, 
+        content, 
+        image_url,
+    });
 });
 
 //DELETE/api/posts/:id
