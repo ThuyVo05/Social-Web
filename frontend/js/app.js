@@ -1,8 +1,9 @@
 const API = '/api/posts';
 const postList = document.getElementById('post-list');
 const form = document.getElementById('post-form');
+const fileInput = document.getElementById('image');
+const preview = document.getElementById('preview');
 const authNav = document.getElementById('auth-nav');
-
 function renderAuthNav() {
     const user = getUser();
     if (user) {
@@ -31,6 +32,7 @@ async function loadPosts() {
         const loggedIn = isLoggedIn();
 
         postList.innerHTML = posts.map(post => {
+            const image = post.image_url ? `<img src="${post.image_url}" alt="Image" class="post-image" />` : '';
             const date = post.createdAt || post.created_at;
             const deleteBtn = loggedIn
                 ? `<button onclick="deletePost(${post.id})">Xóa</button>`
@@ -39,6 +41,7 @@ async function loadPosts() {
                 <li class="post">
                     <strong>${post.author}</strong>
                     <p>${post.content}</p>
+                    ${image}
                     <small>${new Date(date).toLocaleString('vi-VN')}</small>
                     ${deleteBtn}
                 </li>
@@ -67,15 +70,26 @@ async function deletePost(id) {
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const formData = new FormData();
     const content = document.getElementById('content').value;
+    const image = document.getElementById('image').files[0];
+    if (content) {
+        formData.append('content', content);
+    }
+    if (image) {
+        formData.append('image', image);
+    }
+    if (!content.trim() && !image) {
+        alert('Cần có nội dung hoặc ảnh');
+        return;
+    }
     try {
-        const res = await fetch(API, {
+        const res = await fetch(`${API}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 ...authHeaders(),
             },
-            body: JSON.stringify({ content }),
+            body: formData,
         });
         if (!res.ok) {
             throw new Error('Failed to create post');
@@ -85,6 +99,11 @@ form.addEventListener('submit', async (e) => {
     } catch (error) {
         console.error('Error creating post:', error);
     }
+});
+
+fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (file) preview.src = URL.createObjectURL(file);
 });
 
 renderAuthNav();

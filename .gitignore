@@ -4,6 +4,9 @@ node_modules/
 # Environment_variables (chứa mật khẩu, secret)
 .env
 backend/.env
+backend/uploads/*
+#ignore uploads folder but keep the .gitkeep file
+!backend/uploads/.gitkeep   
 
 # OS / editor
 .DS_Store
