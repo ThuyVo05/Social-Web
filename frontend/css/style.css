@@ -72,7 +72,8 @@ body {
 
 /* Main content */
 .container {
-    max-width: 600px;
+    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
     padding: 2rem 1rem;
 }
@@ -208,4 +209,24 @@ button[type="submit"]:hover {
 .error-msg {
     color: #dc3545;
     font-size: 0.9rem;
+}
+
+/* Login-form */
+#login-form {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Register-form */
+#register-form {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
