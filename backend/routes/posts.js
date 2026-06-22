@@ -3,6 +3,8 @@ const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/auth');
 const upload = require('../middleware/upload');
+const fs = require('fs');
+const path = require('path');
 
 //GET/api/posts
 router.get('/', async (req, res) => {
@@ -37,6 +39,17 @@ router.post('/', auth, upload, async (req, res) => {
 
 //DELETE/api/posts/:id
 router.delete('/:id', auth, async (req, res) => {
+    const [result] = await db.query('SELECT image_url FROM posts WHERE id = ?', [req.params.id]);
+    if (result.length > 0) {
+        const imageUrl = result[0].image_url;
+        if (imageUrl) {
+            fs.unlink(path.join(__dirname, '..', 'uploads', imageUrl.split('/').pop()), (err) => {
+                if (err) {
+                    console.error('Error deleting image:', err);
+                }
+            });
+        }
+    }
     await db.query('DELETE FROM posts WHERE id = ?', [req.params.id]);
     res.json({message: 'Post is deleted completely!'});
 });
