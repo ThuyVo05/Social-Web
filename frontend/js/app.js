@@ -8,6 +8,7 @@ function renderAuthNav() {
     const user = getUser();
     if (user) {
         authNav.innerHTML = `
+            <a href="chat.html" class="auth-link">Chat</a>
             <span class="username">${user.username}</span>
             <button class="auth-link auth-link-btn" id="logout-btn">Đăng xuất</button>
         `;
@@ -15,6 +16,7 @@ function renderAuthNav() {
         form.classList.remove('hidden');
     } else {
         authNav.innerHTML = `
+            <a href="chat.html" class="auth-link">Chat</a>
             <a href="login.html" class="auth-link">Đăng nhập</a>
             <a href="register.html" class="auth-link auth-link-primary">Đăng ký</a>
         `;

@@ -13,12 +13,22 @@ CREATE TABLE users (
 
 CREATE TABLE posts (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  author VARCHAR(50) NOT NULL,
   content TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   image_url VARCHAR(255) DEFAULT NULL,
   FOREIGN KEY (author) REFERENCES users(username)
 );
 
-INSERT INTO posts (author, content) VALUES
-('Thuy', 'Hi'),
-('ThuyVo', 'Hello World!');
+CREATE TABLE messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  author VARCHAR(50) NOT NULL,
+  content TEXT NOT NULL,
+  image_url VARCHAR(255) DEFAULT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (author) REFERENCES users(username),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+
