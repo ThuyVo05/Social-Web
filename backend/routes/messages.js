@@ -35,5 +35,3 @@ router.post('/', auth, upload, async (req, res) => {
         image_url,
     });
 });
-
-module.exports = router;
